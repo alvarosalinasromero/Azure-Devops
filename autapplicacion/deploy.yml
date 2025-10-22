@@ -1,9 +1,36 @@
-trigger:
-  branches:
-    include:
-      - main
+parameters:
+  - name: displayName
+    type: string
+    default: "MyAppTerraform1"
+  - name: secretName
+    type: string
+    default: "MySecret-1"
+  - name: startDate
+    type: string
+    default: "2024-06-01T00:00:00Z"
+  - name: endDate
+    type: string
+    default: "2025-06-01T00:00:00Z"
+
+trigger: none
 
 pool:
   vmImage: 'ubuntu-latest'
 
-stages:
+steps:
+  - checkout: self
+
+  - script: |
+      terraform init
+      terraform plan \
+        -var "display_name=${{ parameters.displayName }}" \
+        -var 'password={"display_name":"${{ parameters.secretName }}","start_date":"${{ parameters.startDate }}","end_date":"${{ parameters.endDate }}" }'
+    displayName: "Inicializar y planificar Terraform"
+  - task: ManualValidation@0
+    inputs:
+      instructions: 'Revisar el plan de Terraform y aprobar para continuar con la aplicación.'
+      onTimeout: 'reject'
+      timeout: '120' # Tiempo en minutos para la validación manual
+  - script: |
+      terraform apply
+    displayName: "Ejecutar Terraform"
