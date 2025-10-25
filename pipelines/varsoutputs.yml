@@ -15,5 +15,5 @@ steps:
    - script: echo "Deploying $(appName) to $(env) environment"
      displayName: "Deployment with variable and outputs"
 
-   - script: echo "Using secret key: $(secretkey)"
+   - script: echo "Using secret key= $(secretkey)"
      displayName: "Using secret variable"
