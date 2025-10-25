@@ -1,0 +1,19 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  appName: "MyApp"
+  env: "Production"
+  secretkey: "myclave"
+
+steps:
+   - script: echo "Deploying $(appName) to $(env) environment"
+     displayName: "Deployment with variable and outputs"
+
+   - script: echo "Using secret key: $(secretkey)"
+     displayName: "Using secret variable"
