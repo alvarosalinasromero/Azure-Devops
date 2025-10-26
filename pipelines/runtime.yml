@@ -25,14 +25,23 @@ steps:
   # STEP 2 - Generate a runtime variable using a logging command
   - script: |
       echo "===== STEP 2: Creating dynamic runtime variable ====="
-      currentDate=$(date +'%Y.%m.%d_%H%M%S')
-      # Create a runtime variable
-      echo "##vso[task.setvariable variable=CurrentDateTime]$currentDate"
       echo "##vso[task.setvariable variable=dynamicTag]Createdynamicvar-$(Build.BuildId)-$(runtime)-$(CurrentDateTime)"
     displayName: "Create dynamic variable"
 
+  - script: |
+      echo "===== STEP 3: Generate CurrentDateTime variable ====="
+      currentDate=$(date +'%Y.%m.%d_%H%M%S')
+      echo "##vso[task.setvariable variable=CurrentDateTime]$currentDate"
+    displayName: "Generate current date variable"
+
   # STEP 3 - Use the dynamic variable created in Step 2
   - script: |
-      echo "===== STEP 3: Using runtime variable created dynamically ====="
+      echo "===== STEP 4: Using runtime variable created dynamically ====="
       echo "Dynamic variable value: $(dynamicTag)"
+    displayName: "Use dynamic variable"
+
+  - script: |
+      echo "===== STEP 5: Show dynamic variable ====="
+      echo "Dynamic variable: $(dynamicTag)"
+      echo "CurrentDateTime: $(CurrentDateTime)"
     displayName: "Use dynamic variable"
